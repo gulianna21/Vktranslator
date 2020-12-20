@@ -85,8 +85,8 @@ export default class Translator extends Component {
           onValueChange={(lang) =>
             this.setState({languageTo: lang, languageCode: lang})
           }>
-          {Object.keys(Languages).map((key) => (
-            <Picker.Item label={Languages[key]} value={key} />
+          {Object.keys(Languages).map((key, index) => (
+            <Picker.Item key={index} label={Languages[key]} value={key} />
           ))}
         </Picker>
 

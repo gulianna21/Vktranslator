@@ -14,13 +14,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ImageZoomViewer from 'react-native-image-zoom-viewer';
 
 export default function VK() {
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [myRecording, setMyRecording] = useState(false);
   const [allRecording, setAllRecording] = useState(true);
+  const [switch1, setSwitch1] = useState(true);
+  const [switch2, setSwitch2] = useState(false);
 
   const renderHeader = () => {
     return (
-      <View style={{width: '100%'}}>
+      <View>
         <TouchableOpacity
           onPress={() => {
             setIsModalVisible(false);
@@ -39,86 +42,35 @@ export default function VK() {
 
   const renderStatus = () => {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          marginLeft: 10,
-          alignItems: 'center',
-          paddingVertical: 8,
-        }}>
+      <View style={styles.status}>
         <Avatar
           rounded
           size={60}
           source={{url: 'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg'}}
         />
-        <View style={{flexDirection: 'column', paddingTop: 5}}>
+        <View style={styles.statusContent}>
           <Text style={styles.name}> Юлия Гуськова </Text>
           <Text style={styles.statusText}> "какой-то статус" </Text>
-          <View style={{flexDirection: 'row', paddingVertical: 4}}>
-            <Text style={{marginLeft: 17, fontSize: 14, color: '#b0b0b0'}}>
-              online
-            </Text>
-            <Icon
-              name="tablet"
-              size={15}
-              color="grey"
-              style={{marginLeft: 4}}
-            />
+          <View style={styles.st}>
+            <Text style={styles.statusIn}>online</Text>
+            <Icon name="tablet" size={15} color="grey" />
           </View>
         </View>
       </View>
     );
   };
 
-  const renderActionButton = () => {
+  const renderActionButton = (names: string, title: string) => {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 10,
-          marginBottom: 10,
-          justifyContent: 'space-between',
-          marginRight: 15,
-          marginLeft: 10,
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity style={{alignItems: 'center'}}>
-          <Icon
-            name="camera"
-            size={19}
-            color={'#0000FF'}
-            style={{marginLeft: 14, marginBottom: 5}}
-          />
-          <Text style={styles.mainText}>История</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{alignItems: 'center'}}>
-          <Icon
-            name="pencil"
-            size={19}
-            color={'#0000FF'}
-            style={{marginLeft: 14, marginBottom: 5}}
-          />
-          <Text style={styles.mainText}>Запись</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{}}>
-          <Icon
-            name="photo"
-            size={19}
-            color={'#0000FF'}
-            style={{marginLeft: 14, marginBottom: 5}}
-          />
-          <Text style={styles.mainText}>Фото</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{}}>
-          <Icon
-            name="angellist"
-            size={19}
-            color={'#0000FF'}
-            style={{marginLeft: 14, marginBottom: 5}}
-          />
-          <Text style={styles.mainText}>Клип</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.viewAction}>
+        <Icon
+          name={names}
+          size={19}
+          color={'#0000FF'}
+          style={styles.iconAction}
+        />
+        <Text style={styles.mainText}>{title}</Text>
+      </TouchableOpacity>
     );
   };
 
@@ -183,7 +135,7 @@ export default function VK() {
 
   const renderImage = () => {
     return this.images.map((img) => (
-      <View style={{flex: 1}}>
+      <View style={styles.renderImage}>
         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
           <Image
             source={{
@@ -197,51 +149,52 @@ export default function VK() {
     ));
   };
 
+  const renderSwitch = (title: string, active1: boolean, active2: boolean) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setMyRecording(active1),
+            setAllRecording(active2),
+            setSwitch1(active2),
+            setSwitch2(active1);
+        }}>
+        <Text style={active1 ? styles.activeTitle : styles.notActive}>
+          {title}
+        </Text>
+        {active1 && <View style={styles.underline} />}
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView edges={['top']} backgroundColor={'white'} zIndex={1000}>
       {renderStatus()}
-      <View style={{marginTop: 5, marginBottom: 10}}>
-        <TouchableOpacity
-          style={{
-            paddingVertical: 8,
-            backgroundColor: '#DCDCDC',
-            alignItems: 'center',
-            borderRadius: 7,
-          }}>
-          <Text style={{color: '#0000CD', fontSize: 15}}>Редактировать</Text>
+      <View style={styles.viewEdit}>
+        <TouchableOpacity style={styles.edit}>
+          <Text style={styles.textEdit}>Редактировать</Text>
         </TouchableOpacity>
-        {renderActionButton()}
+        <View style={styles.actionButton}>
+          {renderActionButton('camera', 'История')}
+          {renderActionButton('pencil', 'Запись')}
+          {renderActionButton('photo', 'Фото')}
+          {renderActionButton('angellist', 'Клип')}
+        </View>
         {renderMainInfo()}
       </View>
-      <View style={{height: 1, width: '100%', backgroundColor: '#DCDCDC'}} />
-      <View style={{paddingTop: 10}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={styles.mainText}>ФОТОГРАФИИ 5</Text>
+      <View style={styles.smallSeparator} />
+      <View style={styles.mainCont}>
+        <View style={styles.photoBlock}>
+          <Text style={styles.mainText}>ФОТОГРАФИИ 3</Text>
           <Icon
             name="angle-right"
             size={13}
             color={'#0000FF'}
-            style={{marginRight: 19}}
+            style={styles.iconRight}
           />
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            marginRight: 5,
-          }}>
+        <View style={styles.contentModal}>
           <Modal visible={isModalVisible} transparent={true}>
-            <View
-              style={{
-                backgroundColor: 'black',
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-              }}>
+            <View style={styles.modal}>
               <StatusBar barStyle="light-content" />
               {renderHeader()}
               <ImageZoomViewer
@@ -257,106 +210,29 @@ export default function VK() {
           {renderImage()}
         </View>
       </View>
-      <View style={{height: 6, width: '100%', backgroundColor: '#DCDCDC'}} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingVertical: 10,
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-          }}
-          onPress={() => {}}>
+      <View style={styles.bigSeparator} />
+      <View style={styles.newAll}>
+        <TouchableOpacity style={styles.newBlockAva} onPress={() => {}}>
           <Avatar
             rounded
             size="small"
             source={{url: 'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg'}}
           />
-          <View
-            style={{
-              flex: 2,
-              padding: 8,
-              backgroundColor: '#DCDCDC',
-              borderRadius: 5,
-              marginLeft: 9,
-            }}>
-            <Text style={{}}>Что у вас нового?</Text>
+          <View style={styles.newBlock}>
+            <Text>Что у вас нового?</Text>
           </View>
         </TouchableOpacity>
-        <Icon
-          name="image"
-          size={20}
-          color={'#b0b0b0'}
-          style={{marginLeft: 10}}
-        />
+        <Icon name="image" size={20} color={'#b0b0b0'} style={styles.icons} />
       </View>
-      <View style={{height: 6, width: '100%', backgroundColor: '#DCDCDC'}} />
-      <View
-        style={{
-          marginHorizontal: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingVertical: 10,
-        }}>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity
-            disabled={false}
-            onPress={() => {
-              setMyRecording(false), setAllRecording(true);
-            }}>
-            <Text
-              style={
-                allRecording
-                  ? {marginRight: 8, marginBottom: 3}
-                  : {marginRight: 8, color: '#DCDCDC'}
-              }>
-              Все записи
-            </Text>
-            {allRecording && (
-              <View
-                style={{
-                  height: 2,
-                  width: '90%',
-                  backgroundColor: '#0000FF',
-                }}
-              />
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setMyRecording(true), setAllRecording(false);
-            }}>
-            <Text
-              style={
-                myRecording
-                  ? {marginRight: 8, marginBottom: 3}
-                  : {marginRight: 8, color: '#DCDCDC'}
-              }>
-              Мои записи
-            </Text>
-            {myRecording && (
-              <View
-                style={{
-                  height: 2,
-                  width: '90%',
-                  backgroundColor: '#0000FF',
-                }}
-              />
-            )}
-          </TouchableOpacity>
+      <View style={styles.bigSeparator} />
+      <View style={styles.allTask}>
+        <View style={styles.allTaskBlock}>
+          {renderSwitch('Все записи', switch1, switch2)}
+          {renderSwitch('Мои записи', switch2, switch1)}
         </View>
-        <Icon
-          name="search"
-          size={19}
-          color={'#b0b0b0'}
-          style={{marginLeft: 10}}
-        />
+        <Icon name="search" size={19} color={'#b0b0b0'} style={styles.icons} />
       </View>
-      <View style={{height: 1, width: '100%', backgroundColor: '#DCDCDC'}} />
+      <View style={styles.smallSeparator} />
     </SafeAreaView>
   );
 }
@@ -402,5 +278,131 @@ const styles = StyleSheet.create({
   iconClose: {
     marginLeft: 14,
     marginTop: 55,
+  },
+  status: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  statusContent: {
+    flexDirection: 'column',
+    paddingTop: 5,
+  },
+  statusIn: {
+    marginLeft: 17,
+    fontSize: 14,
+    color: '#b0b0b0',
+    marginRight: 4,
+  },
+  st: {
+    flexDirection: 'row',
+    paddingVertical: 4,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    marginTop: 10,
+    marginBottom: 10,
+    justifyContent: 'space-between',
+    marginRight: 15,
+    marginLeft: 10,
+    alignItems: 'center',
+  },
+  iconAction: {
+    marginLeft: 14,
+    marginBottom: 5,
+  },
+  viewAction: {
+    alignItems: 'center',
+  },
+  renderImage: {
+    flex: 1,
+  },
+  edit: {
+    paddingVertical: 8,
+    backgroundColor: '#DCDCDC',
+    alignItems: 'center',
+    borderRadius: 7,
+  },
+  textEdit: {
+    color: '#0000CD',
+    fontSize: 15,
+  },
+  viewEdit: {
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  smallSeparator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: '#DCDCDC',
+  },
+  bigSeparator: {
+    height: 6,
+    width: '100%',
+    backgroundColor: '#DCDCDC',
+  },
+  underline: {
+    height: 2,
+    width: '90%',
+    backgroundColor: '#0000FF',
+  },
+  activeTitle: {
+    marginRight: 8,
+    marginBottom: 3,
+  },
+  notActive: {
+    marginRight: 8,
+    color: '#DCDCDC',
+  },
+  allTask: {
+    marginHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  icons: {
+    marginLeft: 10,
+  },
+  allTaskBlock: {
+    flexDirection: 'row',
+  },
+  newBlock: {
+    flex: 2,
+    padding: 8,
+    backgroundColor: '#DCDCDC',
+    borderRadius: 5,
+    marginLeft: 9,
+  },
+  newBlockAva: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+  newAll: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  modal: {
+    backgroundColor: 'black',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  contentModal: {
+    flexDirection: 'row',
+    marginTop: 5,
+    marginRight: 5,
+  },
+  photoBlock: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  mainCont: {
+    paddingTop: 10,
+  },
+  iconRight: {
+    marginRight: 19,
   },
 });
