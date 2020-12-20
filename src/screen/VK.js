@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,40 +13,31 @@ import {Avatar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImageZoomViewer from 'react-native-image-zoom-viewer';
 
-interface State {
-  allRecording: boolean;
-  myRecording: boolean;
-  isModalVisible: boolean;
-}
+export default function VK() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [myRecording, setMyRecording] = useState(false);
+  const [allRecording, setAllRecording] = useState(true);
 
-export default class VK extends Component {
-  state: State = {
-    allRecording: true,
-    myRecording: false,
-    isModalVisible: false,
-  };
-
-  renderHeader() {
+  const renderHeader = () => {
     return (
       <View style={{width: '100%'}}>
         <TouchableOpacity
-          onPress={() => this.setState({isModalVisible: false})}
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+          onPress={() => {
+            setIsModalVisible(false);
+          }}
+          style={styles.header}>
           <Icon
             name="close"
             size={30}
             color={'white'}
-            style={{marginLeft: 14, marginTop: 55}}
+            style={styles.iconClose}
           />
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  renderStatus() {
+  const renderStatus = () => {
     return (
       <View
         style={{
@@ -77,9 +68,9 @@ export default class VK extends Component {
         </View>
       </View>
     );
-  }
+  };
 
-  renderActionButton() {
+  const renderActionButton = () => {
     return (
       <View
         style={{
@@ -129,9 +120,9 @@ export default class VK extends Component {
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  renderMainInfo() {
+  const renderMainInfo = () => {
     return (
       <View>
         <View style={{marginTop: 10, flexDirection: 'row', marginLeft: 5}}>
@@ -176,100 +167,115 @@ export default class VK extends Component {
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
   images = [
-    'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg',
-    'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg',
+    {
+      url: 'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg',
+    },
+    {
+      url: 'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg',
+    },
+    {
+      url: 'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg',
+    },
   ];
 
-  renderImageViews(urlImg: string, index: number) {
-    return (
-      <TouchableOpacity
-        key={index}
-        onPress={() => this.setState({isModalVisible: true})}>
-        <Image
-          source={{
-            url: urlImg,
-          }}
-          resizeMode={'contain'}
-          style={styles.photo}
-        />
-      </TouchableOpacity>
-    );
-  }
+  const renderImage = () => {
+    return this.images.map((img) => (
+      <View style={{flex: 1}}>
+        <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+          <Image
+            source={{
+              url: img.url,
+            }}
+            resizeMode={'contain'}
+            style={styles.photo}
+          />
+        </TouchableOpacity>
+      </View>
+    ));
+  };
 
-  render() {
-    return (
-      <SafeAreaView edges={['top']} backgroundColor={'white'} zIndex={1000}>
-        {this.renderStatus()}
-        <View style={{marginTop: 5, marginBottom: 10}}>
-          <TouchableOpacity
-            style={{
-              paddingVertical: 8,
-              backgroundColor: '#DCDCDC',
-              alignItems: 'center',
-              borderRadius: 7,
-            }}>
-            <Text style={{color: '#0000CD', fontSize: 15}}>Редактировать</Text>
-          </TouchableOpacity>
-          {this.renderActionButton()}
-          {this.renderMainInfo()}
-        </View>
-        <View style={{height: 1, width: '100%', backgroundColor: '#DCDCDC'}} />
-        <View style={{paddingTop: 10}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={styles.mainText}>ФОТОГРАФИИ 5</Text>
-            <Icon
-              name="angle-right"
-              size={13}
-              color={'#0000FF'}
-              style={{marginRight: 19}}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 5,
-              marginLeft: 20,
-              width: '100%',
-            }}>
-            <Modal visible={this.state.isModalVisible} transparent={true}>
-              <View
-                style={{
-                  backgroundColor: 'black',
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                }}>
-                <StatusBar barStyle="light-content" />
-                {this.renderHeader()}
-                <ImageZoomViewer
-                  enableImageZoom
-                  enableSwipeDown
-                  renderIndicator={() => <View />}
-                  saveToLocalByLongPress={false}
-                  onCancel={() => this.setState({isModalVisible: false})}
-                  imageUrls={this.images}
-                />
-              </View>
-            </Modal>
-            {this.images.map(this.renderImageViews)}
-          </View>
-        </View>
-        <View style={{height: 6, width: '100%', backgroundColor: '#DCDCDC'}} />
+  return (
+    <SafeAreaView edges={['top']} backgroundColor={'white'} zIndex={1000}>
+      {renderStatus()}
+      <View style={{marginTop: 5, marginBottom: 10}}>
+        <TouchableOpacity
+          style={{
+            paddingVertical: 8,
+            backgroundColor: '#DCDCDC',
+            alignItems: 'center',
+            borderRadius: 7,
+          }}>
+          <Text style={{color: '#0000CD', fontSize: 15}}>Редактировать</Text>
+        </TouchableOpacity>
+        {renderActionButton()}
+        {renderMainInfo()}
+      </View>
+      <View style={{height: 1, width: '100%', backgroundColor: '#DCDCDC'}} />
+      <View style={{paddingTop: 10}}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingVertical: 10,
-            alignItems: 'center',
           }}>
-          <Avatar rounded size="small" source={require('../../img/5.jpg')} />
+          <Text style={styles.mainText}>ФОТОГРАФИИ 5</Text>
+          <Icon
+            name="angle-right"
+            size={13}
+            color={'#0000FF'}
+            style={{marginRight: 19}}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 5,
+            marginRight: 5,
+          }}>
+          <Modal visible={isModalVisible} transparent={true}>
+            <View
+              style={{
+                backgroundColor: 'black',
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+              }}>
+              <StatusBar barStyle="light-content" />
+              {renderHeader()}
+              <ImageZoomViewer
+                enableImageZoom
+                enableSwipeDown
+                renderIndicator={() => <View />}
+                saveToLocalByLongPress={false}
+                onCancel={() => setIsModalVisible(false)}
+                imageUrls={this.images}
+              />
+            </View>
+          </Modal>
+          {renderImage()}
+        </View>
+      </View>
+      <View style={{height: 6, width: '100%', backgroundColor: '#DCDCDC'}} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingVertical: 10,
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+          }}
+          onPress={() => {}}>
+          <Avatar
+            rounded
+            size="small"
+            source={{url: 'https://avatarko.ru/img/kartinka/2/Gubka_Bob.jpg'}}
+          />
           <View
             style={{
               flex: 2,
@@ -280,79 +286,79 @@ export default class VK extends Component {
             }}>
             <Text style={{}}>Что у вас нового?</Text>
           </View>
-          <Icon
-            name="image"
-            size={20}
-            color={'#b0b0b0'}
-            style={{marginLeft: 10}}
-          />
-        </View>
-        <View style={{height: 6, width: '100%', backgroundColor: '#DCDCDC'}} />
-        <View
-          style={{
-            marginHorizontal: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingVertical: 10,
-          }}>
-          <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity
-              disabled={false}
-              onPress={() =>
-                this.setState({allRecording: true, myRecording: false})
+        </TouchableOpacity>
+        <Icon
+          name="image"
+          size={20}
+          color={'#b0b0b0'}
+          style={{marginLeft: 10}}
+        />
+      </View>
+      <View style={{height: 6, width: '100%', backgroundColor: '#DCDCDC'}} />
+      <View
+        style={{
+          marginHorizontal: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingVertical: 10,
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            disabled={false}
+            onPress={() => {
+              setMyRecording(false), setAllRecording(true);
+            }}>
+            <Text
+              style={
+                allRecording
+                  ? {marginRight: 8, marginBottom: 3}
+                  : {marginRight: 8, color: '#DCDCDC'}
               }>
-              <Text
-                style={
-                  this.state.allRecording
-                    ? {marginRight: 8, marginBottom: 3}
-                    : {marginRight: 8, color: '#DCDCDC'}
-                }>
-                Все записи
-              </Text>
-              {this.state.allRecording && (
-                <View
-                  style={{
-                    height: 2,
-                    width: '90%',
-                    backgroundColor: '#0000FF',
-                  }}
-                />
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                this.setState({allRecording: false, myRecording: true})
+              Все записи
+            </Text>
+            {allRecording && (
+              <View
+                style={{
+                  height: 2,
+                  width: '90%',
+                  backgroundColor: '#0000FF',
+                }}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setMyRecording(true), setAllRecording(false);
+            }}>
+            <Text
+              style={
+                myRecording
+                  ? {marginRight: 8, marginBottom: 3}
+                  : {marginRight: 8, color: '#DCDCDC'}
               }>
-              <Text
-                style={
-                  this.state.myRecording
-                    ? {marginRight: 8, marginBottom: 3}
-                    : {marginRight: 8, color: '#DCDCDC'}
-                }>
-                Мои записи
-              </Text>
-              {this.state.myRecording && (
-                <View
-                  style={{
-                    height: 2,
-                    width: '90%',
-                    backgroundColor: '#0000FF',
-                  }}
-                />
-              )}
-            </TouchableOpacity>
-          </View>
-          <Icon
-            name="search"
-            size={19}
-            color={'#b0b0b0'}
-            style={{marginLeft: 10}}
-          />
+              Мои записи
+            </Text>
+            {myRecording && (
+              <View
+                style={{
+                  height: 2,
+                  width: '90%',
+                  backgroundColor: '#0000FF',
+                }}
+              />
+            )}
+          </TouchableOpacity>
         </View>
-        <View style={{height: 1, width: '100%', backgroundColor: '#DCDCDC'}} />
-      </SafeAreaView>
-    );
-  }
+        <Icon
+          name="search"
+          size={19}
+          color={'#b0b0b0'}
+          style={{marginLeft: 10}}
+        />
+      </View>
+      <View style={{height: 1, width: '100%', backgroundColor: '#DCDCDC'}} />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -388,5 +394,13 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     fontSize: 14,
     color: '#0000FF',
+  },
+  header: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconClose: {
+    marginLeft: 14,
+    marginTop: 55,
   },
 });
