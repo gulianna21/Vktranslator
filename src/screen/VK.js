@@ -156,7 +156,7 @@ export default function VK() {
           setMyRecording(active1),
             setAllRecording(active2),
             setSwitch1(active2),
-            setSwitch2(active1);
+            setSwitch2(active1)
         }}>
         <Text style={active1 ? styles.activeTitle : styles.notActive}>
           {title}
