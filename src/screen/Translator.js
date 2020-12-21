@@ -14,19 +14,17 @@ import {
 } from 'react-native-power-translator';
 
 const access =
-  'ya29.c.Ko8B0AfecCSZ5_kw-SiWXO0M5xTFC7zqKwtIrcwScQ0NcfT9oyz-_4j74hj618FUvW3Atep3AYIj-h7Je0POA6kswdYKzOCUz3TDgh0T-ov86aQomo21Ese-QjDkxhO6Z7viRCdf1Qm0tPKQrG51w2av2-acLcw4PrjlXHQVuZSTchHs4MZA7pygDIt2hFHOg1o';
+  'ya29.c.Kp0B6gcbqeaaVy3J0ZfIipL7Hkx3LxcuDrujCHGtSdmgLO1aAqJa1k9TVQnFYbk9vei5mdpzXih3k9jZUw8RVErLu6o8T5pllNU4QgbH98FjYkOiLfnckeGm2tLvq_3WYJY8WHJtH0Oc33Rnwj7l1xYqge8abyGA_rX4r5DorQ-R0QpQBjki_C4gJkXk_-BC3o3maJhWYonBLzNpF-23AA';
+
 export default function Translator() {
-  const [languageFrom, setLanguageFrom] = useState('');
-  const [languageTo, setLanguageTo] = useState('');
-  const [languageCode, setLanguageCode] = useState('en');
+  const [languageFrom, setLanguageFrom] = useState('ru');
+  const [languageTo, setLanguageTo] = useState('en');
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
-  const [submit, setSubmit] = useState(false);
 
   const handleTranslate = () => {
-    const source = 'ru';
     const q = inputText;
-    const query = `format=text&source=${source}&target=${languageCode}&q=${q}`;
+    const query = `format=text&source=${languageFrom}&target=${languageTo}&q=${q}`;
     fetch('https://translation.googleapis.com/language/translate/v2?' + query, {
       method: 'POST',
       headers: {
@@ -43,14 +41,27 @@ export default function Translator() {
   TranslatorConfiguration.setConfig(
     ProviderTypes.Google,
     '@google-cloud/translate',
-    languageCode,
+    languageTo,
+    languageFrom,
   );
   return (
     <View style={styles.container}>
+      <Text style={styles.textSelect}>
+        Укажите с какого язык необходимо перевести:
+      </Text>
+      <Picker
+        selectedValue={languageFrom}
+        onValueChange={(lang) => {
+          setLanguageFrom(lang);
+        }}>
+        {Object.keys(Languages).map((key, index) => (
+          <Picker.Item key={index} label={Languages[key]} value={key} />
+        ))}
+      </Picker>
       <View style={styles.input}>
         <TextInput
           style={styles.textInput}
-          placeholder="Введите текст на русском языке для перевода"
+          placeholder="Введите текст для перевода"
           underlineColorAndroid="transparent"
           onChangeText={(inputText) => setInputText(inputText)}
           value={inputText}
@@ -62,13 +73,12 @@ export default function Translator() {
       <Picker
         selectedValue={languageTo}
         onValueChange={(lang) => {
-          setLanguageTo(lang), setLanguageCode(lang);
+          setLanguageTo(lang);
         }}>
         {Object.keys(Languages).map((key, index) => (
           <Picker.Item key={index} label={Languages[key]} value={key} />
         ))}
       </Picker>
-
       <View style={styles.output}>
         <Text style={styles.textInput}>{outputText}</Text>
       </View>
