@@ -46,9 +46,11 @@ export default function Translator() {
   );
   return (
     <View style={styles.container}>
-      <Text style={styles.textSelect}>
-        Укажите с какого язык необходимо перевести:
-      </Text>
+      <View style={styles.textSel}>
+        <Text style={styles.textSelect}>
+          Укажите с какого языка необходимо перевести:
+        </Text>
+      </View>
       <Picker
         selectedValue={languageFrom}
         onValueChange={(lang) => {
@@ -67,9 +69,11 @@ export default function Translator() {
           value={inputText}
         />
       </View>
-      <Text style={styles.textSelect}>
-        Укажите на какой язык необходимо перевести:
-      </Text>
+      <View style={styles.textSel}>
+        <Text style={styles.textSelect}>
+          Укажите на какой язык необходимо перевести:
+        </Text>
+      </View>
       <Picker
         selectedValue={languageTo}
         onValueChange={(lang) => {
@@ -93,6 +97,7 @@ export default function Translator() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'white',
     paddingTop: 53,
   },
   input: {
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   submitButton: {
-    backgroundColor: '#7a42f4',
+    backgroundColor: '#1E90FF',
     padding: 10,
     margin: 15,
     borderRadius: 5,
@@ -132,5 +137,9 @@ const styles = StyleSheet.create({
   },
   textSelect: {
     textAlign: 'center',
+  },
+  textSel: {
+    backgroundColor: '#1E90FF',
+    padding: 10,
   },
 });
