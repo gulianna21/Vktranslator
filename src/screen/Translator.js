@@ -48,7 +48,7 @@ export default function Translator() {
     <View style={styles.container}>
       <View style={styles.textSel}>
         <Text style={styles.textSelect}>
-          Укажите с какого языка необходимо перевести:
+          Выберите язык с которого переводите:
         </Text>
       </View>
       <Picker
@@ -71,7 +71,7 @@ export default function Translator() {
       </View>
       <View style={styles.textSel}>
         <Text style={styles.textSelect}>
-          Укажите на какой язык необходимо перевести:
+          Выберите язык на который переводите:
         </Text>
       </View>
       <Picker
@@ -137,9 +137,10 @@ const styles = StyleSheet.create({
   },
   textSelect: {
     textAlign: 'center',
+    fontWeight: '800',
+    fontSize: 15,
   },
   textSel: {
-    backgroundColor: '#1E90FF',
     padding: 10,
   },
 });
